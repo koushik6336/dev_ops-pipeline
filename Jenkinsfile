@@ -13,14 +13,21 @@ pipeline {
         stage('Build with Maven') {
             steps {
                 echo 'Building project...'
-                bat 'mvn clean package'
+                bat 'mvnw.cmd clean package'
             }
         }
 
-        stage('Verify Build') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Checking if JAR is created...'
-                bat 'dir target'
+                echo 'Building Docker image...'
+                bat 'docker build -t devops-pipeline:v1 .'
+            }
+        }
+
+        stage('Verify Docker Image') {
+            steps {
+                echo 'Listing Docker images...'
+                bat 'docker images'
             }
         }
     }
