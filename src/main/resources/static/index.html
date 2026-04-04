@@ -76,27 +76,24 @@
 
     <!-- 🔥 NEW SCRIPT (REAL-TIME MONITORING) -->
     <script>
-    async function checkHealth() {
-        try {
-            const res = await fetch('/health');
-            const data = await res.json();
+async function checkHealth() {
+    try {
+        const res = await fetch('http://localhost:8082/health');
+        const text = await res.text();
 
-            if (data.status === 'UP') {
-                document.getElementById('status').innerHTML = "🟢 UP";
-            } else {
-                document.getElementById('status').innerHTML = "🔴 DOWN";
-            }
-        } catch (e) {
+        if (text.includes("Healthy")) {
+            document.getElementById('status').innerHTML = "🟢 UP";
+        } else {
             document.getElementById('status').innerHTML = "🔴 DOWN";
         }
+    } catch (e) {
+        document.getElementById('status').innerHTML = "🔴 DOWN";
     }
+}
 
-    // Run every 5 seconds
-    setInterval(checkHealth, 5000);
-
-    // Run immediately
-    checkHealth();
-    </script>
+setInterval(checkHealth, 5000);
+checkHealth();
+</script>
 
 </body>
 </html>
