@@ -36,15 +36,24 @@ pipeline {
                 echo 'Deploying container...'
                 bat '''
                 echo Stopping old container...
-                docker stop devops-container || exit 0
+                docker stop devops-container
 
                 echo Removing old container...
-                docker rm devops-container || exit 0
+                docker rm devops-container
 
                 echo Running new container...
-                docker run -d -p 8082:8082 --name devops-container devops-pipeline:v1
+                docker run -d -p 8082:8080 --name devops-container devops-pipeline:v1
                 '''
             }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Deployment successful!'
+        }
+        failure {
+            echo '❌ Deployment failed. Check logs.'
         }
     }
 }
