@@ -30,5 +30,21 @@ pipeline {
                 bat 'docker images'
             }
         }
+
+        stage('Deploy Container') {
+            steps {
+                echo 'Deploying container...'
+                bat '''
+                echo Stopping old container...
+                docker stop devops-container || exit 0
+
+                echo Removing old container...
+                docker rm devops-container || exit 0
+
+                echo Running new container...
+                docker run -d -p 8082:8082 --name devops-container devops-pipeline:v1
+                '''
+            }
+        }
     }
 }
